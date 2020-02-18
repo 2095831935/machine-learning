@@ -136,3 +136,20 @@ def datingClassTest():
             errorCount += 1
     print("the total error rate is: %f" % (errorCount/float(numTestVecs)))
 ```
+
+**step6**: 构建完整可用系统：预测约会对象；
+``` python3
+def classifyPerson():
+    """
+    构建完整可用系统：预测函数
+    """
+    resultList = ['not at all', 'in small doses', 'in large doses']
+    percentTats = float(input("Percentage of time spent playing video games? <== "))
+    ffMiles = float(input("frequent flier miles earned per year? <== "))
+    iceCream = float(input("liters of ice cream consumed per year? <== "))
+    datingDataMat, datingLabels = file2matrix('datingTestSet2.txt')
+    normMat, ranges, minVals = autoNorm(datingDataMat)
+    inArr = (array([ffMiles, percentTats, iceCream])-minVals)/ranges
+    classifierResult = classify0(inArr, normMat, datingLabels, 4)
+    print("You will probably like this person: ", resultList[classifierResult-1])
+```
