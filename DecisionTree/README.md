@@ -1,5 +1,7 @@
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 # 相关介绍
 #### 决策树的相关术语
 信息：如果待分类的事务可能划分在多个分类之中，则事务$ x_i $的信息定义为：$ l(x_i)=-log_2p(x_i) $  
