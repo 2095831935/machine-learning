@@ -112,3 +112,29 @@ def createTree(dataSet, labels):
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
     return myTree
 ```
+**step4** 使用Matplotlib绘制树形图;
+1. 绘制树节点；
+``` python3
+# 使用文本注解绘制树节点
+decisionNode = dict(boxstyle="sawtooth", fc="0.8")
+leafNode = dict(boxstyle="round4", fc="0.8")
+arrow_args = dict(arrowstyle="<-")
+# 绘制带箭头的注解
+def plotNode(nodeTxt, centerPt, parentPt, nodeType):
+    """
+    使用文本注解绘制树节点
+    """
+    createPlot.ax1.annotate(nodeTxt, xy=parentPt, xycoords='axes fraction', xytext=centerPt, textcoords='axes fraction', va='center', ha='center', bbox=nodeType, arrowprops=arrow_args)
+
+def createPlot():
+    """
+    简单示例
+    """
+    fig = plt.figure(1, facecolor='white')
+    fig.clf()
+    createPlot.ax1 = plt.subplot(111,frameon=False)
+    plotNode("决策节点", (0.5, 0.1), (0.1, 0.5), decisionNode)
+    plotNode("叶节点", (0.8, 0.1), (0.3, 0.8), leafNode)
+    plt.show()
+```
+2. 绘制整棵树；
