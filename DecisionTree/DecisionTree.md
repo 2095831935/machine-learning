@@ -138,3 +138,36 @@ def createPlot():
     plt.show()
 ```
 2. 绘制整棵树；
+    - 确定树有多少叶节点及多少层，从而确定x轴与y轴的长度；
+``` python3
+def getNumLeafs(myTree):
+    """
+    为了确定x轴的长度，需要确定树有多少个叶节点；
+    """
+    numLeafs = 0
+    firstStr = list(myTree.keys())[0]
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        # 测试节点的数据类型是否为字典
+        if type(secondDict[key]).__name__ == "dict":
+            numLeafs += getNumLeafs(secondDict[key])
+        else:
+            numLeafs += 1
+    return numLeafs
+
+def getTreeDepth(myTree):
+    """
+    为了确定y轴的长度，需要确定树有多少层；
+    """
+    maxDepth = 0
+    firstStr = list(myTree.keys())[0] # 注意python3的keys()方法不再返回列表，而是"dict_keys"对象，不支持索引；
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        if type(secondDict[key]).__name__ == "dict":
+            thisDepth = 1 + getTreeDepth(secondDict[key])
+        else:
+            thisDepth = 1
+        if thisDepth > maxDepth:
+            maxDepth = thisDepth
+    return maxDepth        
+```
