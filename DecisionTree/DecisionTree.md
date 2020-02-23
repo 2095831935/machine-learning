@@ -226,3 +226,37 @@ def plotTree(myTree, parentPt, nodeTxt):
 
 **step5** 测试和存储分类器；
     - 使用决策树执行分类；
+``` python3
+def classify(inputTree, featLabels, testVec):
+    """
+    利用决策树inputTree对testVec样本执行分类；
+    """
+    firstStr = list(inputTree.keys())[0]
+    secondDict = inputTree[firstStr]
+    # 将标签字符串转换为索引
+    featIndex = featLabels.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featLabels, testVec)
+            else:
+                classLabel= secondDict[key]
+    return classLabel
+```
+- 决策树存储
+``` python3
+def storeTree(inputTree, filename):
+    """
+    用pickle模块序列化对象存储在磁盘上；
+    """
+    fw = open(filename, 'w')
+    pickle.dump(inputTree, fw)
+    fw.close()
+
+def grabTree(filename):
+    """
+    装载序列化对象
+    """
+    fr = open(filename)
+    return pickle.load(fr)
+```
