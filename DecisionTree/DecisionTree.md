@@ -171,3 +171,58 @@ def getTreeDepth(myTree):
             maxDepth = thisDepth
     return maxDepth        
 ```
+- 绘制决策树；注意树的根结点为当前树所有叶节点的中间位置；这里重新定义了`createPlot`函数；
+``` python3
+def plotMidText(cntrPt, parentPt, txtString):
+    """
+    在父子节点间填充文本信息
+    """
+    xMid = (parentPt[0] - cntrPt[0]) / 2.0 + cntrPt[0]
+    yMid = (parentPt[1] - cntrPt[1]) / 2.0 + cntrPt[1]
+    createPlot.ax1.text(xMid*(1+0.03), yMid, txtString, va="center", ha="center", rotation=0)
+
+def plotTree(myTree, parentPt, nodeTxt):
+    """
+    parentPt为myTree的父节点位置；
+    (plotTree.xoff, plotTree.yoff)为上一个叶子节点的位置；
+    """
+    # 计算宽和高
+    numLeafs = getNumLeafs(myTree)
+    depth = getTreeDepth(myTree)
+    firstStr = list(myTree.keys())[0]
+    # 将当前根节点置入myTree所有叶节点的中间
+    cntrPt = (plotTree.xoff + (1.0 + float(numLeafs) ) / 2.0 / plotTree.totalW, plotTree.yoff )
+    # 标记子节点属性值
+    plotMidText(cntrPt, parentPt, nodeTxt)
+    plotNode(firstStr, cntrPt, parentPt, decisionNode)
+    secondDict = myTree[firstStr]
+    # 减小y偏移
+    plotTree.yoff = plotTree.yoff - 1.0 / plotTree.totalD
+    for key in secondDict.keys():
+        if type(secondDict[key]).__name__ == "dict":
+            plotTree(secondDict[key], cntrPt, str(key))
+        else:
+            plotTree.xoff = plotTree.xoff + 1.0 / plotTree.totalW
+            plotNode(secondDict[key], (plotTree.xoff, plotTree.yoff), cntrPt, leafNode)  
+            plotMidText((plotTree.xoff, plotTree.yoff), cntrPt, str(key))
+    # 递归结束，还原y偏移
+    plotTree.yoff = plotTree.yoff + 1.0 / plotTree.totalD
+    
+ def createPlot(inTree):
+    """
+    简单示例
+    """
+    fig = plt.figure(1, facecolor='white')
+    fig.clf()
+    axprops = dict(xticks=[], yticks=[])
+    createPlot.ax1 = plt.subplot(111,frameon=False, **axprops)
+    plotTree.totalW = float(getNumLeafs(inTree))
+    plotTree.totalD = float(getTreeDepth(inTree))
+    plotTree.xoff = -0.5/plotTree.totalW
+    plotTree.yoff = 1.0
+    plotTree(inTree, (0.5, 1.0), '')
+    plt.show()
+```
+
+**step5** 测试和存储分类器；
+    - 使用决策树执行分类；
