@@ -224,7 +224,7 @@ def plotTree(myTree, parentPt, nodeTxt):
     plt.show()
 ```
 
-**step5** 测试和存储分类器；
+**step5** 测试和存储分类器；  
     - 使用决策树执行分类；
 ``` python3
 def classify(inputTree, featLabels, testVec):
