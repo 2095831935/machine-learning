@@ -1,6 +1,4 @@
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 # 一、朴素贝叶斯
 &emsp;&emsp;朴素贝叶斯 (NB) 算法是生成模型，给出一个最优的猜测结果，同时给出这个结果的概率估计值；朴素贝叶斯之所以称为“朴素”，是因为该算法的前提假设是最原始的、最简单的。本文首先介绍朴素贝叶斯算法的原理，其次给出其实现代码，最后给出朴素贝叶斯算法的实例；
