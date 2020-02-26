@@ -20,11 +20,43 @@ def textSparse(bigString):
     """
     正则表达式进行文本解析；
     """
-    listOfTokens = re.split(r'\w*', bigString)
+    listOfTokens = re.split(r'\W+', bigString)
     return [tok.lower() for tok in listOfTokens if len(tok) > 2]
 ```
 
 **step2** 邮件分类；其中NB的训练等相关函数源自textCategorization.md文件中；
 ``` python3
-
+def spamTest():
+    """
+    用email压缩包中的数据进行测试；
+    """
+    docList, classList, fullText = [], [], []
+    for i in range(1, 26):
+        # 导入并解析文本文件
+        wordList = textSparse(open(r'.\email\spam\%d.txt'%i).read())
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(1)
+        wordList = textSparse(open(r'.\email\ham\%d.txt'%i, encoding="ISO-8859-1").read())
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(0)
+    vocabList = createVocabList(docList)
+    trainingSet, testSet = list(range(50)), []
+    for i in range(10):
+        randIndex = int(random.uniform(0, len(trainingSet)))
+        testSet.append(trainingSet[randIndex])
+        del(trainingSet[randIndex])
+    trainMat, trainClasses = [], []
+    for docIndex in trainingSet:
+        trainMat.append(setOfWords2Vec(vocabList, docList[docIndex]))
+        trainClasses.append(classList[docIndex])
+    p0V0, p0V1, p1V0, p1V1, pSpam = Modify_trainNB1(array(trainMat), array(trainClasses))
+    errorCount = 0
+    # 对测试集分类
+    for docIndex in testSet:
+        wordVector = setOfWords2Vec(vocabList, docList[docIndex])
+        if Modify_classifyNB(array(wordVector), p0V0, p0V1, p1V0, p1V1, pSpam) != classList[docIndex]:
+            errorCount += 1
+    print("the error rate is: ", float(errorCount) / len(testSet))
 ```
