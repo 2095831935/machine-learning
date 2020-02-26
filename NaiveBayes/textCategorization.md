@@ -143,3 +143,7 @@ def testingNB():
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
     print(testEntry, "'classified as: '", classifyNB(thisDoc, p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive))
 ```
+
+
+# 补充
+&emsp;&emsp;本例中的训练代码部分与《机器学习实战》一书中的源码有所区别，主要在于计算条件概率和进行分类部分；（个人觉得书中计算条件概率时书中源码对分母的计算有问题，另外在分类时只考虑特征值为1的特征，为此，我根据西瓜书中提供的算法思路进行修正。）
