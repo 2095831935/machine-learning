@@ -74,20 +74,19 @@ def trainNB0(trainMatrix, trainCategory):
     # 初始化概率
     p0Num, p1Num = zeros(numWords), zeros(numWords)
     p0Denom, p1Denom = 0, 0
+    # 条件概率p(word|ci)是标签ci类下，所有出现的单词中，word出现的概率
     for i in range(numTrainDocs):
         if trainCategory[i] == 1:
             # 向量相加
             p1Num += trainMatrix[i]
-            p1Denom += 1
+            p1Denom +=  sum(trainMatrix[i])
         else:
             p0Num += trainMatrix[i]
-            p0Denom += 1
+            p0Denom += sum(trainMatrix[i])
     # 对每个元素做除法计算条件概率；
-    p1Vect1 = p1Num / p1Denom
-    p1Vect0 = ones(ones(numWords) - p1Vect1)
-    p0Vect1 = p0Num / p0Denom
-    p0Vect0 = ones(ones(numWords) - p0Vect1)
-    return p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive
+    p1Vect = p1Num / p1Denom
+    p0Vect = p0Num / p0Denom
+    return p0Vect, p1Vect, pAbusive
 
 def trainNB1(trainMatrix, trainCategory):
     """
@@ -108,17 +107,15 @@ def trainNB1(trainMatrix, trainCategory):
         if trainCategory[i] == 1:
             # 向量相加
             p1Num += trainMatrix[i]
-            p1Denom += 1
+            p1Denom += sum(trainMatrix[i])
         else:
             p0Num += trainMatrix[i]
-            p0Denom += 1
+            p0Denom += sum(trainMatrix[i])
     # 与trainNB0不同的是，考虑到条件概率相乘可能会下溢
     # 因此将其全部转换成log值；
-    p1Vect1 = log(p1Num / p1Denom) 
-    p1Vect0 = log(ones(numWords) - p1Num / p1Denom)
-    p0Vect1 = log(p0Num / p0Denom)
-    p0Vect0 = log(ones(numWords) - p0Num / p0Denom)
-    return p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive
+    p1Vect = log(p1Num / p1Denom) 
+    p0Vect = log(p0Num / p0Denom)
+    return p0Vect, p1Vect, pAbusive
 ```
 
 **step3** 构建分类算法并进行测试；
@@ -127,8 +124,8 @@ def classifyNB(vec2Classify, p0Vect0, p0Vect1, p1Vect0, p1Vect1, pClass1):
     """
     利用NB对样本vec2Classify进行分类；
     """
-    p1 = sum(vec2Classify * p1Vect1) + sum((ones(len(vec2Classify)) - vec2Classify) * p1Vect0) + log(pClass1)
-    p0 = sum(vec2Classify * p0Vect1) + sum((ones(len(vec2Classify)) - vec2Classify) * p0Vect0) + log(1-pClass1)
+    p1 = sum(vec2Classify * p1Vect1) + log(pClass1)
+    p0 = sum(vec2Classify * p0Vect1) + log(1-pClass1)
     if p1 > p0:
         return 1
     else:
@@ -140,15 +137,11 @@ def testingNB():
     trainMat = []
     for postinDoc in listOPosts:
         trainMat.append(setOfWords2Vec(myVocabList, postinDoc))
-    p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive = trainNB1(array(trainMat), array(listClasses))
+    p0Vect, p1Vect, pAbusive = trainNB1(array(trainMat), array(listClasses))
     testEntry = ['love', 'my', 'dalmation']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
-    print(testEntry, "'classified as: '", classifyNB(thisDoc, p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive))
+    print(testEntry, "'classified as: '", classifyNB(thisDoc, p0Vect, p1Vect, pAbusive))
     testEntry = ['stupid', 'garbage']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
-    print(testEntry, "'classified as: '", classifyNB(thisDoc, p0Vect0, p0Vect1, p1Vect0, p1Vect1, pAbusive))
+    print(testEntry, "'classified as: '", classifyNB(thisDoc, p0Vect, p1Vect, pAbusive))
 ```
-
-
-# 补充
-&emsp;&emsp;本例中的训练代码部分与《机器学习实战》一书中的源码有所区别，主要在于计算条件概率和进行分类部分；（个人觉得书中计算条件概率时书中源码对分母的计算有问题，另外在分类时只考虑特征值为1的特征，为此，我根据西瓜书中提供的算法思路进行修正。）
