@@ -1,7 +1,7 @@
 # 二维示例
 &emsp;&emsp;有100个样本点，每个点包含两个数值型特征：X1和X2。在此数据集上，我们将通过使用梯度上升法找到最佳回归系数，也就是拟合出Logistic回归模型的最佳参数。
 
-**step1** 梯度上升优化算法
+**step1** 梯度下降优化算法
 算法伪代码：
 &emsp;每个回归系数初始化为1
 &emsp;重复R次：
@@ -32,9 +32,9 @@ def sigmoid(inX):
         ans[i][0] = 1.0 / (1+math.exp(inX[i][0]))
     return ans
 
-def gradAscent(dataMatIn, classLabels):
+def gradDescent(dataMatIn, classLabels):
     """
-    梯度上升找到最佳参数；
+    梯度下降找到最佳参数；
     输出为特征的权重系数；
     """
     # 首先转换为Numpy矩阵数据类型
