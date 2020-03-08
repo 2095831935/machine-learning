@@ -1,13 +1,13 @@
 # 二维示例
 &emsp;&emsp;有100个样本点，每个点包含两个数值型特征：X1和X2。在此数据集上，我们将通过使用梯度上升法找到最佳回归系数，也就是拟合出Logistic回归模型的最佳参数。
 
-**step1** 梯度下降优化算法
-算法伪代码：
-&emsp;每个回归系数初始化为1
-&emsp;重复R次：
-&emsp;&emsp;计算整个数据集的梯度
-&emsp;&emsp;使用`alpha × gradient`更新回归系数的向量
-&emsp;&emsp;返回回归系数
+**step1** 梯度下降优化算法  
+算法伪代码:  
+&emsp;每个回归系数初始化为1  
+&emsp;重复R次：  
+&emsp;&emsp;计算整个数据集的梯度  
+&emsp;&emsp;使用`alpha × gradient`更新回归系数的向量  
+&emsp;&emsp;返回回归系数  
  ``` python3
  def loadDataSet():
     """
